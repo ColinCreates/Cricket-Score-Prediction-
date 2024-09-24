@@ -1,0 +1,49 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+data={
+    'runs':[4,11,15,20,23,35,33,43,53,54],
+    'overs':[1,2,3,4,5,6,7,8,9,10]
+
+}
+
+df=pd.DataFrame(data)
+
+df.to_csv("cricket1.csv",index=False)
+
+
+
+
+data=pd.read_csv("cricket1.csv")
+print(data)
+overs=data['overs']
+runs=data['runs']
+numerator=0
+denominator=0
+n = len(overs)
+x = np.mean(overs)
+y = np.mean(runs)
+for i in range (n):
+    numerator += (overs[i]-x)*(runs[i]-y)
+    denominator += (overs[i]-x)**2
+
+m = numerator/denominator
+c = y -(m*x)
+
+print(f'Slope (m): {m}')
+print(f'Intercept (c): {c}')
+
+overs_new = int (input("Enter overs: "))
+runs_predicted = m * overs_new + c
+print(f'Predicted runs for {overs_new} overs: {runs_predicted}')
+
+
+#graph
+plt.scatter(overs, runs, color='red',label='Data Points')
+plt.plot(overs, m*overs+c, color='blue',label='Regression line')
+plt.scatter(overs_new, runs_predicted, color='yellow',label='Predicted Runs',zorder=5)
+plt.xlabel('Overs')
+plt.ylabel('Runs')
+plt.title('Runs vs Overs')
+plt.legend()
+plt.show()
